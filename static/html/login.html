@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/login.css">
+    <title>Login</title>
+</head>
+<body>
+        <div class="login-page">
+                <div class="form">
+                  <form class="register-form">
+                    <input type="text" placeholder="name"/>
+                    <input type="password" placeholder="password"/>
+                    <input type="password" placeholder="confirm password"\>
+                    <button>create</button>
+                    <p class="message">Already registered? <a href="#" id="msg-btn">Sign In</a></p>
+                  </form>
+                  <form class="login-form">
+                    <input type="text" placeholder="username"/>
+                    <input type="password" placeholder="password"/>
+                    <button>login</button>
+                    <p class="message">Not registered? <a href="#">Create an account</a></p>
+                  </form>
+                </div>
+        </div>
+
+    <script>
+        const path = require("path");
+        require(path.join(__dirname, "..", "js", "login.js"));
+    </script>
+</body>
+</html>
+
+
