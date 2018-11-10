@@ -214,6 +214,63 @@ ipc.on("update-record", function (event, updated_data) {
 });
 
 
+
+ipc.on("change_password", function (event, data) {
+    console.log("request to change password");
+
+    let pwd = data.password;
+    let new_pwd = data.new_password;
+    console.log(pwd, new_pwd);
+
+    let query_string = 
+    `
+        SELECT password 
+        FROM users
+        WHERE username = "${global.user.username}"
+    `;
+
+    console.log(query_string);
+
+    connection.query(query_string, function (error, results, fields) {
+        if (error) throw error;
+        let hash_pwd = results[0].password;
+        console.log("hash: " + hash_pwd);
+
+        bcrypt.compare(pwd, hash_pwd, function (error, res) {
+            if (error) throw error;
+            if (res === true) {
+                console.log("correct old password");
+
+                bcrypt.hash(new_pwd, null, null, function(err, hash){
+
+                    let query_string = 
+                    `
+                        UPDATE users SET password = "${hash}"
+                        WHERE username = "${global.user.username}"
+                    `;
+
+                    connection.query(query_string, function (error, results, fields) {
+                        if (error) throw error;
+                        
+                        event.sender.send("change_password_success");
+                    })
+
+                });
+
+            }
+            if (res === false) {
+                console.log("incorrect old password");
+                event.sender.send("incorrect_password");
+                return;
+            }
+        });
+    });
+});
+
+
+
+
+
 app.on("closed", function (){
     console.log("closing database connection");
     db_connection.disconnect();

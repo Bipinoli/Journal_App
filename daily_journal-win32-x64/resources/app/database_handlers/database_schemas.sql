@@ -1,3 +1,6 @@
+-- this schema was not run as a source in DBMS
+-- it is just the record of similar commands i used
+
 CREATE TABLE categories (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL 

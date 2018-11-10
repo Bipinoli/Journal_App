@@ -20,6 +20,30 @@
     <!-- close button -->
     <img id="window-close-btn" src="../../assets/cross.png" height="40px" width="40px">
 
+
+    <!-- change password view  -->
+    <div id="change-password-block">
+        <center>
+            <form action="#">
+                <input type="password" name="old-password" id="old-password" placeholder="old password">
+                <input type="password" name="new-password" id="new-password" placeholder="new password">
+                <input type="password" name="confirm-password" id="confirm-password" placeholder="confirm new password">
+            </form>
+            <button id="done-btn" class="custom-btn">Done</button>
+            <button id="cancel-btn" class="custom-btn">Cancel</button>
+        </center>
+    </div>
+
+    <!-- change password error message   -->
+    <div id="change-password-error-notification">
+        <img id="error-msg-cancel-btn" src="../../assets/cross2.png" height="18px" width="18px">
+        <center>
+            <div id="change-password-error-msg">
+                Sorry! .......
+            </div>
+        </center>
+    </div>
+
     <div class="flex-row">
 
         <!-- css animation for AI personality -->
@@ -35,9 +59,11 @@
             <h1 id="title">..Greetings here..</h1>
             <h2 id="subtitle">How was your day today?</h2>
         
-            <a href="../html/fill.html" class="button btnFade btnBlueGreen" id="tell-her-btn">Tell her</a>
-            <a href="../html/view_info.html" class="button btnFade btnBlueGreen" id-"ask-her-btn">Ask her a question</a>
-    
+            <div>
+                <a href="../html/fill.html" class="button btnFade btnBlueGreen" id="tell-her-btn">Tell her</a>
+                <a href="../html/view_info.html" class="button btnFade btnBlueGreen" id-"ask-her-btn">Ask her a question</a>
+            </div>
+            <a href="#" id="change-password">Change Password</a>  
         </div>
         
     </div>
