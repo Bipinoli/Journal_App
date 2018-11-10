@@ -6,9 +6,11 @@
         "electron": "^3.0.6"
     },
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+        "package-app": "electron-packager ."
     },
     "dependencies": {
+        "bcrypt-nodejs": "0.0.3",
         "jquery": "^3.3.1",
         "mysql": "^2.16.0"
     }

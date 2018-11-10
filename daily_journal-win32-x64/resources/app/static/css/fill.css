@@ -83,3 +83,17 @@ body {
 #window-close-btn:hover {
     opacity: 1;
 }
+
+
+/* back button */
+
+#go-back {
+    position: fixed;
+    top: 10px;
+    left: 30px;
+    opacity: 0.8;
+}
+
+#go-back:hover {
+    opacity: 1;
+}

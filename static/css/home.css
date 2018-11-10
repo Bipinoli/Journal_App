@@ -141,3 +141,18 @@ a.button {
 #window-close-btn:hover {
     opacity: 1;
 }
+
+
+
+/* logout button */
+
+#logout {
+  position: fixed;
+  top: 10px;
+  left: 30px;
+  opacity: 0.8;
+}
+
+#logout:hover {
+  opacity: 1;
+}

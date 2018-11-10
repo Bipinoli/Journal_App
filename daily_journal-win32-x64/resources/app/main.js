@@ -6,13 +6,21 @@ const electron = require("electron");
 const app = electron.app;
 const ipc = electron.ipcMain;
 
+const bcrypt = require("bcrypt-nodejs");
+
 let win;
 
 function createWindow() {
     win = new electron.BrowserWindow({frame: false, width: 1200, show: true, minWidth: 800});
 
+    // global variable holding username of the logged in user
+    global.user = {
+        username: null
+    }
+
     win.loadURL(url.format({
-        pathname: path.join(__dirname, "static", "html", "home.html"),
+        // pathname: path.join(__dirname, "static", "html", "home.html"),
+        pathname: path.join(__dirname, "static", "html", "login.html"),
         slashes: true,
         protocol: "file"
     }));
@@ -45,6 +53,83 @@ const db_update = require("./database_handlers/db_update");
 
 const connection = db_connection.connect();
 
+
+
+ipc.on("register_account", function (event, data) {
+    console.log("account to be registered");
+
+    console.log(data.username, data.password);
+    bcrypt.hash(data.password, null, null, function(err, hash) {
+        console.log(data.password + ":", hash);
+
+        let query_string = 
+        `
+        INSERT INTO users
+            (username, password)
+        VALUES 
+            ("${data.username}", "${hash}");
+        `;
+
+        console.log(query_string);
+
+        connection.query(query_string, function (error, results, fields) {
+            if (error) {
+                if (error.code == "ER_DUP_ENTRY") {
+                    console.log("duplicate entry error");
+                    event.sender.send("account_already_exists_error");
+                    return;
+                }
+                throw error;
+            }
+
+            event.sender.send("account_registered");
+        });
+    });
+
+});
+
+
+ipc.on("account_login", function (event, data) {
+
+    let query_string = 
+    `
+        SELECT username, password
+        FROM users
+        WHERE username = "${data.username}" 
+    `;
+
+    console.log(query_string);
+
+    connection.query(query_string, function (error, results, fields) {
+        if (error) throw error;
+        console.log(results);
+
+        if (results.length <= 0) {
+            console.log("User doesn't exist");
+            event.sender.send("login_error", {msg: "There is no account with that username"});
+            return;
+        }
+
+        let pwd_hash = results[0].password;
+        let pwd = data.password;
+
+        bcrypt.compare(pwd, pwd_hash, function (error, res) {
+            if (res === false) {
+                event.sender.send("login_error", {msg: "Incorrect! Password"});
+                return;
+            }
+
+            if (res === true) {
+                console.log("successful login");
+                global.user.username = data.username;
+                event.sender.send("login_success", {username: data.username});
+            }
+        });
+    });
+});
+
+
+
 ipc.on("data-stream", function (event, data){
     console.log("NOTE: data-stream message from renderer", data);
     
@@ -61,7 +146,8 @@ ipc.on("data-stream", function (event, data){
 
             let to_insert_data = {
                 info: descp,
-                category_id: catg_id
+                category_id: catg_id,
+                username: global.user.username
             };
 
             db_insert.insert(connection, "records", to_insert_data, function (error) {

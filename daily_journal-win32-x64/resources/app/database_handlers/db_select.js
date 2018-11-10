@@ -13,7 +13,8 @@ module.exports = {
             INNER JOIN categories
                 ON records.category_id = categories.id
             WHERE
-                DATE(created_at) BETWEEN "${date_from}" AND "${date_to}" `;
+                DATE(created_at) BETWEEN "${date_from}" AND "${date_to}" 
+                AND username = "${global.user.username}"`;
 
         if (category != "all") {
             query_string += ` && categories.name = "${category}" `;

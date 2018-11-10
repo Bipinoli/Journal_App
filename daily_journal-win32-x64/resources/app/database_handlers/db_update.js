@@ -10,7 +10,8 @@ module.exports = {
                 category_id = ${category_id},
                 info = "${description}"
             WHERE
-                id = ${record_id}
+                id = ${record_id} AND
+                username = "${global.user.username}"
         `;
 
         return query_string;

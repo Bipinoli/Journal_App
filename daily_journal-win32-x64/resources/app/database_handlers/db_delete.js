@@ -6,7 +6,8 @@ module.exports = {
         let query_string = 
         `
             DELETE FROM records
-            WHERE id = ${record_id}
+            WHERE id = ${record_id} AND 
+                  username = "${global.user.username}"
         `;
 
         return query_string;

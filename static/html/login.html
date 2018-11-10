@@ -4,27 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/bulma.css">
     <link rel="stylesheet" href="../css/login.css">
     <title>Login</title>
 </head>
 <body>
-        <div class="login-page">
-                <div class="form">
-                  <form class="register-form">
-                    <input type="text" placeholder="name"/>
-                    <input type="password" placeholder="password"/>
-                    <input type="password" placeholder="confirm password"\>
-                    <button>create</button>
-                    <p class="message">Already registered? <a href="#" id="msg-btn">Sign In</a></p>
-                  </form>
-                  <form class="login-form">
-                    <input type="text" placeholder="username"/>
-                    <input type="password" placeholder="password"/>
-                    <button>login</button>
-                    <p class="message">Not registered? <a href="#">Create an account</a></p>
-                  </form>
-                </div>
+
+    <!-- error notification view -->
+    <div class="notification is-danger"  id="invalid-credentials-handler">
+        <button class="delete is-large" id="invalid-credentials-handler-cross-btn"></button>
+        <div id="invalid-credentials-error-msg">
+            Sorry!
         </div>
+    </div>
+
+    <!-- account registered notification view -->
+    <div class="notification is-info"  id="account-registered-handler">
+        <button class="delete is-large" id="account-registered-handler-cross-btn"></button>
+        <div>
+            Account successfully created!
+        </div>
+    </div>
+
+    <!-- close button -->
+    <img id="window-close-btn" src="../../assets/cross.png" height="40px" width="40px">
+    
+    <!-- main view -->
+    <div class="login-page">
+            <div class="form">
+
+              <!-- onsubmit="return false" will make sure that the page will not -->
+              <!-- be refreshed on clicking buttons -->
+              <form class="register-form" onsubmit="return false">
+                <input type="text" id="register-uname" placeholder="username"/>
+                <input type="password" id="register-pwd" placeholder="password"/>
+                <input type="password" id="register-confirm-pwd" placeholder="confirm password"\>
+                <button id="register-account-btn">create</button>
+                <p class="message">Already registered? <a href="#" id="msg-btn">Sign In</a></p>
+              </form>
+
+              <!-- onsubmit="return false" will make sure that the page will not -->
+              <!-- be refreshed on clicking buttons -->
+              <form class="login-form" onsubmit="return false">
+                <input type="text" id="login-uname" placeholder="username"/>
+                <input type="password" id="login-pwd" placeholder="password"/>
+                <button id="login-btn">login</button>
+                <p class="message">Not registered? <a href="#">Create an account</a></p>
+              </form>
+            </div>
+    </div>
 
     <script>
         const path = require("path");
