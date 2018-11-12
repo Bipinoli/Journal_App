@@ -45,6 +45,25 @@ FROM
 
 
 
+-- after escaping against sql injection 
+-- old data has to be modified to be inside the quotation
+
+INSERT INTO records (
+    created_at,
+    info,
+    category_id,
+    username
+)
+SELECT 
+    created_at,
+    CONCAT("'", info, "'") AS info,
+    category_id,
+    username
+FROM 
+    another_records;
+
+
+
 SELECT 
     id,
     created_at,
@@ -102,3 +121,13 @@ SET
     info = "Just chill chill Just chill"
 WHERE 
     id = 80;
+
+
+
+-- SQL INJECTION ATTACKS
+
+-- SQL INJECTION string for info field while providing information
+-- STRING:> You have been hacked by super duper hacker Binay don!!",1,"bipin"),("I hacked bipin with SQL injection
+
+-- in username input field in login screen
+-- STRING:> " OR 3="3

@@ -58,16 +58,20 @@ const connection = db_connection.connect();
 ipc.on("register_account", function (event, data) {
     console.log("account to be registered");
 
-    console.log(data.username, data.password);
-    bcrypt.hash(data.password, null, null, function(err, hash) {
-        console.log(data.password + ":", hash);
+    // Escaping to prevent SQL INJECTION
+    let username = connection.escape(data.username);
+    let password = connection.escape(data.password);
+
+    console.log(username, password);
+    bcrypt.hash(password, null, null, function(err, hash) {
+        console.log(password + ":", hash);
 
         let query_string = 
         `
         INSERT INTO users
             (username, password)
         VALUES 
-            ("${data.username}", "${hash}");
+            (${username}, '${hash}');
         `;
 
         console.log(query_string);
@@ -91,11 +95,14 @@ ipc.on("register_account", function (event, data) {
 
 ipc.on("account_login", function (event, data) {
 
+    // Security against SQL Injection
+    let username = connection.escape(data.username);
+
     let query_string = 
     `
         SELECT username, password
         FROM users
-        WHERE username = "${data.username}" 
+        WHERE username = ${username} 
     `;
 
     console.log(query_string);
@@ -111,7 +118,7 @@ ipc.on("account_login", function (event, data) {
         }
 
         let pwd_hash = results[0].password;
-        let pwd = data.password;
+        let pwd = connection.escape(data.password);
 
         bcrypt.compare(pwd, pwd_hash, function (error, res) {
             if (res === false) {
@@ -135,9 +142,11 @@ ipc.on("data-stream", function (event, data){
     
    for (let i=0; i<data.length; i++) {
        console.log(data[i]);
-       let descp = data[i].description;
-       let category = data[i].category;
 
+       // Security against SQL Injection
+       let descp = connection.escape(data[i].description);
+
+       let category = data[i].category;
        let catg_id = null;
 
        connection.query(`SELECT id FROM categories WHERE name = "${category}" `, function (error, results, fields) {
@@ -192,9 +201,11 @@ ipc.on("update-record", function (event, updated_data) {
 
     console.log(`updated_data: ${updated_data.description}, category: ${updated_data.category}`);
 
-    let category = updated_data.category;
+    // Security against SQL Injection
+    let description = connection.escape(updated_data.description);
+    
     let record_id = updated_data.record_id;
-    let description = updated_data.description;
+    let category = updated_data.category;
 
     connection.query(`SELECT id FROM categories WHERE name = "${category}" `, function (error, results, fields) {
         if (error) throw error;
@@ -218,8 +229,9 @@ ipc.on("update-record", function (event, updated_data) {
 ipc.on("change_password", function (event, data) {
     console.log("request to change password");
 
-    let pwd = data.password;
-    let new_pwd = data.new_password;
+    // Security against SQL Injection
+    let pwd = connection.escape(data.password);
+    let new_pwd = connection.escape(data.new_password);
     console.log(pwd, new_pwd);
 
     let query_string = 

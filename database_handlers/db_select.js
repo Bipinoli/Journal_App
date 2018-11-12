@@ -38,7 +38,9 @@ module.exports = {
                 response.push({
                     record_id: results[i].record_id,
                     created_date: results[i].created_date,
-                    info: results[i].info,
+                    // being escaped against SQL injection
+                    // info is surrounded by quotation like: '<<info here>>'
+                    info: results[i].info.substring(1,results[i].info.length-1),
                     category: results[i].category
                 });
             }
